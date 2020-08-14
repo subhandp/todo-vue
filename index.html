@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODOAPP - Tailwindcss and Vuejs</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+
+    <div id="app" class="flex w-screen h-auto p-4">
+        <div class="w-1/4 h-full "></div>
+        <div class="flex-col w-1/2 h-full p-4 shadow-outline">
+            <h1 class="flex-1  text-center text-5xl  text-blue-600 ">Todos Blues</h1>
+            <svg class="animate-bounce w-6 h-6 text-blue-600 " fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              </svg>
+            <div class="flex items-center border-b-2 py-2">
+                <input class=" text-2xl w-full  mr-3 py-1 px-2 leading-tight outline-none hover:bg-blue-100  " type="text" placeholder="Todo write here!" aria-label="Full name" v-model="newTodo" @keypress.enter="todoAdd(newTodo)">
+                <button class="flex-no-shrink mr-1 bg-blue-300  hover:bg-blue-500 text-black hover:text-teal-darker text-sm py-3 px-8  " type="button" @click="todoAdd(newTodo)">
+                  Add
+                </button>
+                <button class="flex-no-shrink bg-yellow-300 hover:bg-yellow-400 text-black hover:text-teal-darker text-sm py-3 px-8   " type="button" @click="todoCancel()">
+                  Cancel
+                </button>
+            </div>
+            <h2 class="w-full text-center text-red-600 text-lg italic">{{error}}</h2>
+
+            <template v-if="todos.length == 0">
+                <h3 class="flex-1 text-center text-3xl p-4 m-1">empty todos</h3>
+            </template>
+
+            <template v-else>
+                <div class="flex  w-full h-auto p-2 mt-4 " v-for="(todo, index) in todos" :key="index">
+                    <h3 class="w-5/6 text-2xl text-center bg-grey-lightest  bg-yellow-300 ">{{ todo }}</h3>
+                    <button class="w-1/6  pr-2 bg-red-400 hover:bg-red-500 " @click="todoDelete(index)">hapus</button>
+                </div>
+                <button class="w-full bg-red-400 hover:bg-red-500 py-2 px-8 mt-4 rounded"
+                        @click="todoTruncate()"
+                        >
+                    Clear All
+                </button>
+            </template>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.min.js"></script>
+<script>
+    let app = new Vue({
+        el: '#app',
+        data: {
+            newTodo: '',
+            error: '',
+            todos: []
+        },
+        methods: {
+            todoAdd(todo) {
+                if (todo.trim() !== '') {
+                    this.todos.push(todo)
+                    this.newTodo = ''
+                    this.error = ''
+                } else {
+                    this.error = "Todo tidak boleh kosong!"
+                }
+
+            },
+            todoCancel() {
+                this.newTodo = ''
+                this.error = ''
+            },
+            todoDelete(index) {
+                this.todos.splice(index, 1)
+                this.error = ''
+            },
+            todoTruncate() {
+                this.todos = []
+                this.error = ''
+            }
+        }
+    })
+</script>
+
+</html>
