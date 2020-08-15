@@ -36,7 +36,14 @@
 
             <template v-else>
                 <div class="flex  w-full h-auto p-2 mt-4 " v-for="(todo, index) in todos" :key="index">
-                    <h3 class="w-5/6 text-2xl text-center bg-grey-lightest  bg-yellow-300 ">{{ todo }}</h3>
+                    <input class="mr-2 leading-tight" type="checkbox" @click="doneUndone(index)">
+                    <span class="text-sm" v-if="todo.status">
+                        Check for unDone
+                    </span>
+                    <span class="text-sm text-blue-500" v-else>
+                        Check for Done
+                    </span>
+                    <h3 class="w-5/6 text-2xl text-center bg-grey-lightest  bg-yellow-300 ">{{ todo.todo }}</h3>
                     <button class="w-1/6  pr-2 bg-red-400 hover:bg-red-500 " @click="todoDelete(index)">hapus</button>
                 </div>
                 <button class="w-full bg-red-400 hover:bg-red-500 py-2 px-8 mt-4 rounded"
@@ -65,13 +72,19 @@
         methods: {
             todoAdd(todo) {
                 if (todo.trim() !== '') {
-                    this.todos.push(todo)
+                    this.todos.push({
+                        todo: todo,
+                        status: false
+                    })
                     this.newTodo = ''
                     this.error = ''
                 } else {
                     this.error = "Todo tidak boleh kosong!"
                 }
 
+            },
+            doneUndone(index) {
+                this.todos[index].status = !this.todos[index].status;
             },
             todoCancel() {
                 this.newTodo = ''
